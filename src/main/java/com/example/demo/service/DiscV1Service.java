@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.dto.DiscDTO;
+import com.example.demo.controller.dto.DiscraftDiscDTO;
 import com.example.demo.persistence.entity.DiscEntity;
 import com.example.demo.persistence.repository.DiscRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,24 @@ public class DiscV1Service implements DiscService {
 
         return discDTOS;
     }
+
+    public void printDisc(Object object) {
+        if(object instanceof DiscDTO) {
+            System.out.println("It's a DiscDTO.");
+        }
+        else if(object instanceof DiscraftDiscDTO) { // Legacy Discraft discs has a 5th flight number which is their own stability rating
+            System.out.println("It's a DiscraftDiscDTO.");
+        }
+    }
+
+    public String getDiscType(Object object) {
+        return switch(object) {
+            case DiscDTO(String brand, String name, int speed, int glide, int stability, int fade) -> STR."Disc \{name} is a DiscDTO";
+            case DiscraftDiscDTO(String brand, String name, int speed, int glide, int stability, int fade, float stabilityRating) -> STR."Disc \{name} is a DiscraftDiscDTO";
+            default -> "Unknown Disc";
+        };
+    }
+
 
     public List<DiscDTO> getAllDiscs() {
         List<DiscDTO> discDTOS = new ArrayList<>();
